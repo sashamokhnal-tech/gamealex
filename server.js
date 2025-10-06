@@ -154,7 +154,7 @@ app.post('/api/guest_login', (req,res)=>{
     delete data.nonces[address];
     saveData(data);
     res.json({ ok:true, token, user_id: address, username: address });
-  }catch(e){
+  catch(e){
     console.error(e); res.status(500).json({error:'server'});
   }
 });
