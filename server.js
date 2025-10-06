@@ -145,16 +145,18 @@ app.post('/api/guest_login', (req,res)=>{
     if (!ok) return res.status(401).json({error:'signature verify failed'});
 
     // Passed: upsert user by address
+ 
     if (!data.users[address]) data.users[address] = { id: address, username: address };
     // Issue session token
     const token = crypto.randomBytes(24).toString('base64url');
     if (!data.sessions) data.sessions = {};
     data.sessions[token] = { id: address, username: address };
     // Consume nonce
+  try{
     delete data.nonces[address];
     saveData(data);
     res.json({ ok:true, token, user_id: address, username: address });
-  catch(e){
+}catch(e){
     console.error(e); res.status(500).json({error:'server'});
   }
 });
